@@ -1,0 +1,106 @@
+<html>
+	<head>
+		<title>Crazy Copter</title>
+		<style type='text/css'>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+			}
+			
+			#container {
+				clear : both;
+				margin : 0 auto;
+				width : 1001px;
+			}
+			#gameContainer div{
+				display:inline-block;
+			}
+			#log { color:#fff; position:absolute; top:50px; text-align:left; display:block; z-index:100; pointer-events:none; }
+			
+			#info { 
+				margin-top:20px;
+				text-align:center; 
+				color:#f00 ;
+			}
+			
+			#info a{
+				margin-left:15px;
+				margin-right:15px;
+				color:#f00; 
+				background:#000; 
+				padding:5px; 
+				-webkit-border-radius: 5px; 
+				-moz-border-radius: 5px;
+				-webkit-transition-property:color, background;
+				-moz-transition-property:color, background; 
+				-webkit-transition-duration: 1s, 1s;
+				-moz-transition-duration: 1s, 1s; 
+				-webkit-transition-timing-function: linear, ease-in;
+				-moz-transition-timing-function: linear, ease-in;
+			} 
+			
+			#info a:hover{
+				color:#000;
+				background:#f00;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='container'>
+			<div id='gameContainer' style='width:1000px;' align='center'>
+				<canvas id='surface' width=1000 height=700>Your browser doesnt support canvas</canvas>
+			</div>
+			<div id='info'>
+				<a id='instructions' href='#'>Instructions</a>
+				<a href='#'>Source</a>
+				<a href='http://twitter.com/masteranil' target='_blank'>Contact</a>
+			</div>
+			<div id='notify' style="display: none">
+				<ol>
+				<li>Up Arrow : Go up</li>
+				<li>P : Pause/Unpause game</li>
+				<li>Space : To shoot rocket</li>
+				<li>Enter : To restart once gameover</li>
+				</ol>
+			</div>
+		</div>
+
+		<audio id='bg' loop=1 preload='auto'>
+  			<source src="static/sound/bg.ogg" type='audio/ogg' />
+  			<source src="static/sound/bg.mp3" type='audio/mpeg' />
+		</audio>
+        <audio id='shoot' preload='auto'>
+  			<source src="static/sound/shoot.ogg" type="audio/ogg" />
+  			<source src="static/sound/shoot.mp3" type='audio/mpeg' />
+		</audio>
+		<script type='text/javascript'>
+		function toggle() {
+			if(ele.style.display == "block") {
+				ele.style.display = "none";
+		  	}
+			else {
+				ele.style.display = "block";
+			}
+		}
+		var ele = document.getElementById("notify");
+		ele.onclick = toggle; 
+		</script> 		
+		<script type='text/javascript' src='static/stats.js'></script>
+		<script type='text/javascript' src='static/copter-min.js'></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24435005-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+	</body>
+</html>

@@ -9,7 +9,7 @@ window.requestAnimFrame = (function(){
               };
 })();
 
-CLOCK_FACTOR = 1/0.016;
+var CLOCK_FACTOR = 1/0.016;
 
 function AssetManager() {
     this.successCount = 0;
@@ -142,12 +142,11 @@ GameEngine.prototype.init = function(ctx) {
     this.halfSurfaceWidth = this.surfaceWidth/2;
     this.halfSurfaceHeight = this.surfaceHeight/2;
     
-    this.ctx.drawImage(ASSET_MANAGER.getAsset('img/start-screen.png'),0,0);
+    this.ctx.drawImage(ASSET_MANAGER.getAsset('static/img/start-screen.png'),0,0);
     
     var that = this;
     
     var callback = function(e){
-    	console.log('detected click');
     	this.removeEventListener('click',callback,false);
     	that.start();
     }
@@ -215,7 +214,7 @@ function Bg(game){
 	this.game = game;
 	this.x = 0;
 	this.initX = 0;
-	this.sprite = ASSET_MANAGER.getAsset('img/bg.png');
+	this.sprite = ASSET_MANAGER.getAsset('static/img/bg.png');
 }
 
 Bg.prototype = {
@@ -241,7 +240,7 @@ function Helicopter(game,audio){
 	this.y = 300;
 	this.initX = this.x;
 	this.initY = this.y;
-	this.sprite = ASSET_MANAGER.getAsset('img/helicopter.png');
+	this.sprite = ASSET_MANAGER.getAsset('static/img/helicopter.png');
 	this.width = this.sprite.width/3;
 	this.height = this.sprite.height;
 	this.pressed = [];
@@ -298,7 +297,7 @@ Helicopter.prototype = {
 
 function Wall(game,x){
 	this.game = game;
-	this.sprite = ASSET_MANAGER.getAsset('img/wall.png');
+	this.sprite = ASSET_MANAGER.getAsset('static/img/wall.png');
 	this.x = x;
 	this.y = Math.random()*300;
 	this.initX = x;
@@ -332,7 +331,7 @@ function Rocket(game,x,y){
 	this.y = y;
 	this.speed = 9 + this.game.level;
 	this.removeFromWorld = false;
-	this.sprite = ASSET_MANAGER.getAsset('img/rocket.png');
+	this.sprite = ASSET_MANAGER.getAsset('static/img/rocket.png');
 	this.width = this.sprite.width/3;
 	this.height = this.sprite.height;
 	this.animation = new Animation(this.sprite,33, 0.1, true);
@@ -342,7 +341,6 @@ Rocket.prototype = {
 	outOfWorld : function(){
 		if (this.x > this.game.surfaceWidth ) {
 			this.removeFromWorld = true;
-			console.log('removed');ASSET_MANAGER.queueDownload('img/wall.png');
 		}
 	},
 	update : function(){
@@ -395,6 +393,9 @@ CrazyCopter.prototype.start = function() {
 	/*
 		Remember order is important : So that bg drawn first
 	*/
+    this.paused = false;
+    this.gameOver = false;
+    
     this.bg = new Bg(this);
     this.addEntity(this.bg);
 
@@ -428,17 +429,17 @@ CrazyCopter.prototype.reinit = function() {
 }
 
 CrazyCopter.prototype.draw = function() {
-	this.ctx.drawImage(ASSET_MANAGER.getAsset('img/boundryTop.png'),0,-50);
+	this.ctx.drawImage(ASSET_MANAGER.getAsset('static/img/boundryTop.png'),0,-50);
 	if(!this.gameOver){
 		GameEngine.prototype.draw.call(this,function(){
 			game.drawTop();
-		});ASSET_MANAGER.queueDownload('img/start-screen.png');
+		});ASSET_MANAGER.queueDownload('static/img/start-screen.png');
 	}
 	else{
 		this.drawGameOver();
 		this.paused = true;
 	}
-	this.ctx.drawImage(ASSET_MANAGER.getAsset('img/boundryBottom.png'),0,600);
+	this.ctx.drawImage(ASSET_MANAGER.getAsset('static/img/boundryBottom.png'),0,600);
 }
 
 CrazyCopter.prototype.update = function() {
@@ -461,10 +462,19 @@ CrazyCopter.prototype.drawGameOver = function(){
 	this.bgAudio.muted = true;
 	this.ctx.fillStyle = 'rgba(0,0,0,0.5)';
 	this.ctx.fillRect(0,0,this.surfaceWidth,this.surfaceHeight);
-	this.gameOverSprite = ASSET_MANAGER.getAsset('img/gameover.png');
+	this.gameOverSprite = ASSET_MANAGER.getAsset('static/img/gameover.png');
 	this.ctx.drawImage(this.gameOverSprite,this.halfSurfaceWidth - this.gameOverSprite.width/2,
 						this.halfSurfaceHeight - this.gameOverSprite.height/2 - this.offset);
+	//Custom					
+	if(parseInt(highscore.innerHTML) < this.score){
+		highscore.innerHTML = this.score;
+	} 					
 }
+
+/*
+ * Application Classes ended 
+ * Custom code start 
+ */
 
 var keyDown = function(e) {
 	//Up arrow
@@ -474,6 +484,7 @@ var keyDown = function(e) {
 	//P
 	else if (e.keyCode == 80 && !game.gameOver){
 		game.paused = !game.paused;
+		game.bgAudio.muted = !game.bgAudio.muted;
 	}
 	//Enter
 	else if (e.keyCode == 13 && game.gameOver){
@@ -491,7 +502,7 @@ var keyUp = function(e){
 	}
 } 
 
-//Can be changed  
+ 
 var bg = document.querySelector('#bg'),
 	shoot = document.querySelector('#shoot');
 
@@ -501,14 +512,16 @@ var ASSET_MANAGER = new AssetManager();
 var game = new CrazyCopter(bg);
 var GAP = 500;
 
-ASSET_MANAGER.queueDownload('img/start-screen.png');
-ASSET_MANAGER.queueDownload('img/boundryTop.png');
-ASSET_MANAGER.queueDownload('img/boundryBottom.png');
-ASSET_MANAGER.queueDownload('img/wall.png');
-ASSET_MANAGER.queueDownload('img/helicopter.png');
-ASSET_MANAGER.queueDownload('img/bg.png');
-ASSET_MANAGER.queueDownload('img/gameover.png');
-ASSET_MANAGER.queueDownload('img/rocket.png');
+ASSET_MANAGER.queueDownload('static/img/start-screen.png');
+ASSET_MANAGER.queueDownload('static/img/boundryTop.png');
+ASSET_MANAGER.queueDownload('static/img/boundryBottom.png');
+ASSET_MANAGER.queueDownload('static/img/wall.png');
+ASSET_MANAGER.queueDownload('static/img/helicopter.png');
+ASSET_MANAGER.queueDownload('static/img/bg.png');
+ASSET_MANAGER.queueDownload('static/img/gameover.png');
+ASSET_MANAGER.queueDownload('static/img/rocket.png');
+
+var highscore = document.querySelector('#highscore');
 
 document.onkeydown = function(e){
 	keyDown(e);   
@@ -520,8 +533,4 @@ document.onkeyup = function(e){
 
 ASSET_MANAGER.downloadAll(function() {
     game.init(ctx);
-    //game.start();
 });
-
-
-

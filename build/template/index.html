@@ -1,0 +1,160 @@
+<html>
+	<head>
+		<title>Crazy Copter</title>
+		<style type='text/css'>
+			body {
+				font-family: Monospace,Verdana,sans-serif;;
+				background-color: #000;
+			}
+			#container {
+				clear : both;
+				margin : 0 auto;
+				width : 1001px;
+			}
+			#gameContainer div{
+				display:inline-block;
+			}
+			#log { color:#fff; position:absolute; top:50px; text-align:left; display:block; z-index:100; pointer-events:none; }
+			
+			#info { 
+				margin-top:20px;
+				text-align:center; 
+				color:#f00 ;
+			}
+			
+			#info a{
+				margin-left:15px;
+				margin-right:15px;
+				text-decoration:none;
+				color:#f00; 
+				background:#000; 
+				padding:5px; 
+				-webkit-border-radius: 5px; 
+				-moz-border-radius: 5px;
+				-webkit-transition-property:color, background;
+				-moz-transition-property:color, background; 
+				-webkit-transition-duration: 1s, 1s;
+				-moz-transition-duration: 1s, 1s; 
+				-webkit-transition-timing-function: linear, ease-in;
+				-moz-transition-timing-function: linear, ease-in;
+			} 
+			
+			#info a:hover{
+				color:#000;
+				background:#f00;
+			}
+			
+			#notify ,#highscore-cont{
+				min-height:30px;
+				font-size: 12px;
+			}
+			
+			table {
+				font-size: 12px;
+				width: 100%;
+			}
+			th,td {
+				text-align:center;
+			}
+			.ui-icon {
+				background: url('static/img/thumbsBlue.png') no-repeat -18px -146px;
+				width: 12px;
+				height: 12px;
+			}
+			.ui-widget {
+				font-family: Verdana,Arial,sans-serif;
+				font-size: 1.1em;
+			}
+			.ui-state-highlight, .ui-widget-content .ui-state-highlight {
+				border: 1px solid #FCEFA1;
+				background: #FBF9EE 50% 50% repeat-x;
+				color: #363636;
+			}
+			.ui-corner-all {
+				-moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+			}
+			p {
+font-size: 12px;
+}
+		</style>
+		<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24435005-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</head>
+	<body>
+		<div id='container'>
+			<div id='gameContainer' style='width:1000px;' align='center'>
+				<canvas id='surface' width=1000 height=700>Your browser doesnt support canvas</canvas>
+			</div>
+			<div class="ui-widget">
+				<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
+					<p><span class="ui-icon" style="float: left; margin-right: .3em;"></span>
+					<strong>{{ highscore_notify }}</strong></p>
+				</div>
+			</div>
+			<div id='info'>
+				<a href='#' onmouseover="toggle(0);" onmouseout="toggle(0);">Instructions</a>
+				<a href='#' onmouseover="toggle(1);" onmouseout="toggle(0);">Hall of Fame</a>
+				<a href='https://github.com/anilshanbhag/copter.js' target='_blank'>Source</a>
+				<a href='http://twitter.com/masteranil' target='_blank'>Contact</a>
+			</div>
+			<div id='notify' class="ui-widget ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;display: none;">
+			<table>
+				<tr>
+					<th>User</th>
+					<th>Highscore</th>
+					<th>Date</th>
+				</tr> 
+				{% for highscore in highscores %}
+					{% if highscore.user.nickname %}
+						<tr><td> {{ highscore.user.nickname }} </td> 
+					{% else %} 
+						<tr><td> Anonymous </td>
+					{% endif %}
+					<td> {{ highscore.highscore }} </td>
+					<td> {{ highscore.date }} </td></tr>
+				{% endfor %}
+			</table>
+			
+			</div>
+		</div>
+
+<audio id='bg' loop="loop" autoplay=1 preload='auto'>
+	<source src="static/sound/bg.ogg" type='audio/ogg' >
+	<source src="static/sound/bg.mp3" type='audio/mpeg' >
+</audio>
+<audio id='shoot' preload='auto'>
+	<source src="static/sound/shoot.ogg" type="audio/ogg" >
+	<source src="static/sound/shoot.mp3" type='audio/mpeg' >
+</audio>
+<script type='text/javascript'>
+var ele = document.getElementById("notify");
+toggleList = ['<ul><li>Up Arrow : Go up</li><li>P : Pause/Unpause game</li><li>Space : To shoot rocket</li><li>Enter : To restart once gameover</li></ul>',
+ele.innerHTML];
+function toggle(param) {
+	if(ele.style.display == "block") {
+		ele.style.display = "none";
+		ele.innerHTML = "";
+  	}
+	else {
+		ele.style.display = "block";
+		ele.innerHTML = toggleList[parseInt(param)];
+	}
+}
+ele.onclick = toggle; 
+</script> 	 		
+<script type='text/javascript' src='static/stats.js'></script>
+<script type='text/javascript' src='static/copter.js'></script>
+</body>
+</html>

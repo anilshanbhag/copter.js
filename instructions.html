@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="SHORTCUT ICON" href="http://www.anilshanbhag.in/static/favicon.ico">
+		<style type='text/css'>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+			}
+			
+			#container {
+				clear : both;
+				margin : 0 auto;
+				width : 1001px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='container'>
+			<canvas width=1000 height=260 id='header'></canvas>
+			<div id='content'>
+				<ul>
+					<li>Click to start the game</li>
+					<li>The helicopter moves down by default</li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div> 
+		<script type='text/javascript'>
+			var header = document.querySelector('#header'),
+			ctx = header.getContext('2d'),
+			img = new Image();
+			img.onload = function(){
+				ctx.drawImage(img,0,150,1000,260,0,0,1000,260);
+			}
+			img.src ='img/start-screen.png';
+			console.log(img);
+			
+			//
+		</script>
+	</body>
+</html>

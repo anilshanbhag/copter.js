@@ -1,0 +1,18 @@
+application: chrome-copter
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /static/(.*\.(css|js|jpg|png|mp3|ogg))
+  static_files: static/\1
+  upload: static/.*
+  expiration: "30d"
+
+- url: /favicon\.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+
+- url: /.*
+  script: main.py
